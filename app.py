@@ -38,7 +38,7 @@ def add_move():
     except Exception as e:
         return(str(e))
 
-@app.route('getall/')
+@app.route('/getall')
 def get_all():
     try:
         moves = Moves.query.all()
