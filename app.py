@@ -1,7 +1,7 @@
 from flask_sqlalchemy import SQLAlchemy
 import os
 import re
-from flask import Flask, request
+from flask import Flask, request, jsonify
 from flask_migrate import Migrate
 
 app = Flask(__name__)
@@ -28,6 +28,23 @@ db.init_app(app)
 def hello():
     return 'Hello World!'
 
+@app.route('/add')
+def add_move():
+    move = Moves(request.args['move_id'], request.args['move_name'], request.args['effects'], request.args['damage'], request.args['description'], request.args['stat_changes'])
+    try:
+        db.session.add(move)
+        db.session.commit()
+        return 'Move added!'
+    except Exception as e:
+        return(str(e))
+
+@app.route('getall/')
+def get_all():
+    try:
+        moves = Moves.query.all()
+        return jsonify([move.serialize() for move in moves])
+    except Exception as e:
+        return(str(e))
 
 if __name__ == '__main__':
     app.run()
