@@ -30,8 +30,16 @@ def hello():
 
 @app.route('/add', methods=['POST'])
 def add_move():
+    move_id = request.args.get('MoveId')
+    move_name = request.args.get('MoveName')
+    effects = request.args.get('effects')
+    damage = request.args.get('damage')
+    description = request.args.get('description')
+    stat_changes = request.args.get('stat_changes')
+    
+
     try:
-        move = Moves(request.args['move_id'], request.args['move_name'], request.args['effects'], request.args['damage'], request.args['description'], request.args['stat_changes'])
+        move = Moves(MoveId = move_id, MoveName=move_name, effects=effects, damage=damage, description=description, stat_changes=stat_changes)
         db.session.add(move)
         db.session.commit()
         return 'Move added!'
