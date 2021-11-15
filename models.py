@@ -2,7 +2,7 @@ from app import db
 
 
 class Moves(db.Model):
-    __tablename__ = 'moves'
+    __tablename__ = "moves"
 
     MoveId = db.Column(db.Integer, primary_key=True, unique=True)
     MoveName = db.Column(db.String(20), nullable=False)
