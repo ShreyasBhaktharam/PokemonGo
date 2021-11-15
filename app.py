@@ -14,6 +14,8 @@ uri = os.environ['DATABASE_URL']
 if uri.startswith('postgres'):
     uri = re.sub(r'^postgres:', 'postgresql:', uri)
 
+os.setenv('DATABASE_URL', uri)
+
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 
