@@ -14,7 +14,6 @@ from models import Moves
 
 
 db.init_app(app)
-db.create_all()
 
 
 @app.route('/')
