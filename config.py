@@ -1,4 +1,5 @@
 import os
+import re
 basedir = os.path.abspath(os.path.dirname(__file__))
 
 
@@ -8,6 +9,9 @@ class Config(object):
     CSRF_ENABLED = True
     SECRET_KEY = os.environ.get('SECRET_KEY') or 'you-will-never-guess'
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL')
+    #Resolving Heroku PostgresQL migration error
+    if SQLALCHEMY_DATABASE_URI.startswith('postgres'):
+        SQLALCHEMY_DATABASE_URI = re.sub(r'^postgres:', 'postgresql:', SQLALCHEMY_DATABASE_URI)
 
 
 class ProductionConfig(Config):
