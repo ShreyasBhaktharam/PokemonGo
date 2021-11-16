@@ -38,9 +38,8 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True, unique=True)
     username = db.Column(db.String(20), nullable=False)
     password = db.Column(db.String(20), nullable=False)
-    
-    def __init__(self, id, username, password):
-        self.id = id
+
+    def __init__(self, username, password):
         self.username = username
         self.password = password
 
@@ -49,7 +48,6 @@ class User(db.Model):
 
     def serialize(self):
         return {
-            'id': self.id,
             'username': self.username,
             'password': self.password
         }
