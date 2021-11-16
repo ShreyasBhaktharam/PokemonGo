@@ -19,7 +19,7 @@ if uri.startswith('postgres'):
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 
-from models import Moves
+from models import Moves, User
 
 
 db.init_app(app)
@@ -36,6 +36,16 @@ def login():
             username = request.args.get('username')
             password = request.args.get('password')
             password_hash = generate_password_hash(password)
+            user = User.query.filter_by(username=username).first()
+            if user:
+                if user.password == password:
+                    return jsonify({'message': 'success'})
+                else:
+                    return jsonify({'message': 'Invalid password'})
+            new_user = User(username=username, password=password)
+            db.session.add(new_user)
+            db.session.commit()
+
             return jsonify({'You\'re signed in!'})
         except Exception as e:
             return jsonify({'error': str(e)})
