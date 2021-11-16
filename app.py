@@ -31,7 +31,7 @@ db.init_app(app)
 def hello():
     return 'Hello World!'
 
-@app.route('/login', methods=['POST'])
+@app.route('/login', methods=['GET','POST'])
 def login():
     if request.method == 'POST':
         try:
