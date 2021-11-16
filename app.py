@@ -42,7 +42,7 @@ def login():
                     return jsonify({'message': 'success'})
                 else:
                     return jsonify({'message': 'Invalid password'})
-            new_user = User(id=id,username=username, password=password)
+            new_user = User(username=username, password=password)
             db.session.add(new_user)
             db.session.commit()
 
