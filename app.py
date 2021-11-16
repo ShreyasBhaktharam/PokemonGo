@@ -1,11 +1,9 @@
 from flask_sqlalchemy import SQLAlchemy
 import os
 import re
-from flask import Flask, json, request, jsonify, render_template
+from flask import Flask, request, jsonify, render_template
 from flask_migrate import Migrate
-from sqlalchemy.orm import relation
-from werkzeug.exceptions import RequestedRangeNotSatisfiable
-from werkzeug.security import generate_password_hash, check_password_hash
+from werkzeug.security import generate_password_hash
 
 app = Flask(__name__)
 
