@@ -1,9 +1,11 @@
 from flask_sqlalchemy import SQLAlchemy
 import os
 import re
-from flask import Flask, request, jsonify, render_template
+from flask import Flask, json, request, jsonify, render_template
 from flask_migrate import Migrate
+from sqlalchemy.orm import relation
 from werkzeug.exceptions import RequestedRangeNotSatisfiable
+from werkzeug.security import generate_password_hash, check_password_hash
 
 app = Flask(__name__)
 
@@ -28,6 +30,20 @@ db.init_app(app)
 @app.route('/')
 def hello():
     return 'Hello World!'
+
+@app.route('/login', methods=['POST'])
+def login():
+    if request.method == 'POST':
+        try:
+            username = request.args.get('username')
+            password = request.args.get('password')
+            password_hash = generate_password_hash(password)
+            return jsonify({'You\'re signed in!'})
+        except Exception as e:
+            return jsonify({'error': str(e)})
+    return render_template('login.html')
+    
+    
 
 @app.route('/add', methods=['POST'])
 def add_move():
