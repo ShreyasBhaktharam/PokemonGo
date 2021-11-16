@@ -1,8 +1,9 @@
 from flask_sqlalchemy import SQLAlchemy
 import os
 import re
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template
 from flask_migrate import Migrate
+from werkzeug.exceptions import RequestedRangeNotSatisfiable
 
 app = Flask(__name__)
 
@@ -53,6 +54,23 @@ def get_all():
         return jsonify([move.serialize() for move in moves])
     except Exception as e:
         return(str(e))
+
+@app.route('/add/form', methods=['GET', 'POST'])
+def add_move_form():
+    if request.method == 'POST':
+        move_id = request.form.get('MoveId')
+        move_name = request.form.get('name')
+        effects = request.form.get('effects')
+        damage = request.form.get('damage')
+        description = request.form.get('description')
+        try:
+            move = Moves(MoveId = move_id, MoveName=move_name, effects=effects, damage=damage, description=description)
+            db.session.add(move)
+            db.session.commit()
+            return 'Move added!'
+        except Exception as e:
+            return(str(e))
+    return render_template('add_move.html')
 
 if __name__ == '__main__':
     app.run()
