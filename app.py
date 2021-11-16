@@ -63,8 +63,9 @@ def add_move_form():
         effects = request.form.get('effects')
         damage = request.form.get('damage')
         description = request.form.get('description')
+        stat_changes = request.form.get('stat_changes')
         try:
-            move = Moves(MoveId = move_id, MoveName=move_name, effects=effects, damage=damage, description=description)
+            move = Moves(MoveId = move_id, MoveName=move_name, effects=effects, damage=damage, description=description, stat_changes=stat_changes)
             db.session.add(move)
             db.session.commit()
             return 'Move added!'
