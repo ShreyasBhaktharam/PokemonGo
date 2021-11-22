@@ -15,6 +15,29 @@ export APP_SETTINGS="config.DevelopmentConfig"
 export DATABASE_URL= <your-postgresql-database-url>
 ```
 
+
+To make the Flask backend talk to the database, we need use the Flask CLI to initialise and migrate the database:
+Initialise the database after setting the ```DATABASE_URL``` env:
+
+```
+flask db init
+```
+
+
+Migrate the database after defining your models:
+
+```
+flask db migrate
+```
+
+
+Finally run this command to upadate the server and save subsequent changes to the database:
+
+```
+flask db upgrade
+```
+
+
 Finally once all the packages are installed, run the server locally:
 ```
 flask run
