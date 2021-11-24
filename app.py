@@ -19,7 +19,7 @@ if uri.startswith('postgres'):
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 
-from models import Moves, User
+from models import Location, Moves, User
 
 
 db.init_app(app)
@@ -33,20 +33,25 @@ def hello():
 def login():
     if request.method == 'POST':
         try:
+            id = request.args.get('id')
             username = request.args.get('username')
             password = request.args.get('password')
             password_hash = generate_password_hash(password)
             user = User.query.filter_by(username=username).first()
             if user:
                 if user.password == password:
-                    return jsonify({'message': 'success'})
+                    return jsonify({'message': 'Your login was successful!'})
                 else:
                     return jsonify({'message': 'Invalid password'})
-            new_user = User(username=username, password=password)
-            db.session.add(new_user)
-            db.session.commit()
-
-            return jsonify({'You\'re signed in!'})
+            new_user = User(id=id,username=username, password=password)
+            #Check if user is created
+            if new_user:
+                print('created')
+                db.session.add(new_user)
+                db.session.commit()
+                return jsonify({'You\'re signed in!'})
+            else:
+                return jsonify({'message': 'User already exists please try again'})
         except Exception as e:
             return jsonify({'error': str(e)})
     return render_template('login.html')
@@ -79,6 +84,15 @@ def get_all():
     except Exception as e:
         return(str(e))
 
+@app.route('/getLocation')
+def get_location():
+    try:
+        location = Location.query.all()
+        return jsonify([location.serialize() for location in location])
+    except Exception as e:
+        return(str(e))
+
+
 @app.route('/add/form', methods=['GET', 'POST'])
 def add_move_form():
     if request.method == 'POST':
@@ -98,4 +112,4 @@ def add_move_form():
     return render_template('add_move.html')
 
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True)

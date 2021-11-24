@@ -32,6 +32,28 @@ class Moves(db.Model):
             'stat_changes': self.stat_changes
         }
 
+class Location(db.Model):
+    __tablename__ = "location"
+
+    LocationId = db.Column(db.Integer, primary_key=True, unique=True)
+    LocationName = db.Column(db.String(30), nullable = False)
+    Effects = db.Column(db.String(30))
+    SpawnId = db.Column(db.Integer, nullable = False)
+    FKPokemonId = db.Column(db.Integer, nullable = False)
+
+    def __repr__(self) -> str:
+        return super().__repr__()
+
+    def serialize(self):
+        return {
+            'LocationId': self.LocationId,
+            'LocationName': self.LocationName,
+            'Effects': self.Effects,
+            'SpawnId': self.SpawnId,
+            'FKPokemonId': self.FKPokemonId
+        }
+
+        
 class User(db.Model):
     __tablename__ = "user"
 
