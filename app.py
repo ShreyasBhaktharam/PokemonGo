@@ -92,6 +92,14 @@ def get_location():
     except Exception as e:
         return(str(e))
 
+@app.route('/getLocation/id=<LocationId>')
+def get_location_id(LocationId):
+    try:
+        location = Location.query.filter_by(LocationId=LocationId).first()
+        return jsonify(location.serialize())
+    except Exception as e:
+        return jsonify('That location does not exist!')
+
 
 @app.route('/add/form', methods=['GET', 'POST'])
 def add_move_form():
