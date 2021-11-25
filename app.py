@@ -27,23 +27,25 @@ db.init_app(app)
 
 @app.route('/')
 def hello():
-    return 'Hello World!'
+    return 'Hello Pokemon!'
 
-@app.route('/login/id=', methods=['GET','POST'])
+@app.route('/login', methods=['GET','POST'])
 def login():
     if request.method == 'POST':
         try:
-            id = request.args.get('id')
-            username = request.args.get('username')
-            password = request.args.get('password')
-            password_hash = generate_password_hash(password)
-            user = User.query.filter_by(username=username).first()
+            #id = request.form.get('id')
+            username = request.form.get('username')
+            password = request.form.get('password')
+            #password_hash = generate_password_hash(password)
+            #user = User.query.filter_by(username=username).first()
+            return jsonify({'message': 'Your login was successful!'})
+            '''
             if user:
                 if user.password == password:
                     return jsonify({'message': 'Your login was successful!'})
                 else:
                     return jsonify({'message': 'Invalid password'})
-            new_user = User(id=id,username=username, password=password)
+            new_user = User(username=username, password=password)
             #Check if user is created
             if new_user:
                 print('created')
@@ -52,6 +54,12 @@ def login():
                 return jsonify({'You\'re signed in!'})
             else:
                 return jsonify({'message': 'User already exists please try again'})
+            '''
+            
+
+            
+          
+            
         except Exception as e:
             return jsonify({'error': str(e)})
     return render_template('login.html')
@@ -76,7 +84,7 @@ def add_move():
     except Exception as e:
         return(str(e))
 
-@app.route('/getall')
+@app.route('/getPokemon')
 def get_all():
     try:
         moves = Moves.query.all()
@@ -101,7 +109,7 @@ def get_location_id(LocationId):
         return jsonify('That location does not exist!')
 
 
-@app.route('/add/form', methods=['GET', 'POST'])
+@app.route('/add/move', methods=['GET', 'POST'])
 def add_move_form():
     if request.method == 'POST':
         move_id = request.form.get('MoveId')
