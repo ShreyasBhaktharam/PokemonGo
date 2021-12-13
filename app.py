@@ -14,7 +14,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 uri = os.environ['DATABASE_URL']
 if uri.startswith('postgres'):
     uri = re.sub(r'^postgres:', 'postgresql:', uri)
-
+    
 
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
@@ -33,13 +33,12 @@ def hello():
 def login():
     if request.method == 'POST':
         try:
-            #id = request.form.get('id')
+            id = request.form.get('id')
             username = request.form.get('username')
             password = request.form.get('password')
             #password_hash = generate_password_hash(password)
-            #user = User.query.filter_by(username=username).first()
-            return jsonify({'message': 'Your login was successful!'})
-            '''
+            user = User.query.filter_by(username=username).first()
+
             if user:
                 if user.password == password:
                     return jsonify({'message': 'Your login was successful!'})
@@ -54,12 +53,7 @@ def login():
                 return jsonify({'You\'re signed in!'})
             else:
                 return jsonify({'message': 'User already exists please try again'})
-            '''
-            
-
-            
-          
-            
+   
         except Exception as e:
             return jsonify({'error': str(e)})
     return render_template('login.html')
@@ -108,6 +102,16 @@ def get_location_id(LocationId):
     except Exception as e:
         return jsonify('That location does not exist!')
 
+@app.route('/getPokemon/id=<PokemonId>')
+def get_pokemon_id(PokemonId):
+    try:
+        pokemon = Moves.query.filter_by(MoveId=PokemonId).first()
+        return jsonify(pokemon.serialize())
+    except Exception as e:
+        return jsonify('That pokemon does not exist!')
+
+
+
 
 @app.route('/add/move', methods=['GET', 'POST'])
 def add_move_form():
@@ -128,4 +132,4 @@ def add_move_form():
     return render_template('add_move.html')
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run()
